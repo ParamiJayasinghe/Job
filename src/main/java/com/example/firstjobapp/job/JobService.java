@@ -9,7 +9,6 @@ public interface JobService {
     boolean updateJob(Long id, Job updatedJob) ;
 
     List<Job> findAll();
-    void CreateJob();
 
     void CreateJob(Job job);
 

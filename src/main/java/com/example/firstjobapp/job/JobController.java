@@ -1,5 +1,6 @@
 package com.example.firstjobapp.job;
 
+import com.example.firstjobapp.company.Company;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,16 +19,16 @@ public class JobController {
     private final JobService jobService;
 
     @GetMapping("/jobs")
-    public List<Job> findAll(){
-        return jobService.findAll();
+    public ResponseEntity<List<Job>>findAll(){
+        return ResponseEntity.ok(jobService.findAll());
     }
 
     @PostMapping("/jobs")
-    public String CreateJob(@RequestBody Job job)
+    public ResponseEntity<String> CreateJob(@RequestBody Job job)
     {
         jobService.CreateJob(job);
-        return "job added succesfully" ;
-
+        Company c = job.getCompany();
+        return new ResponseEntity<>("job added succesfully",HttpStatus.CREATED );
     }
 
     @GetMapping("/jobs/{ID}")
@@ -49,8 +50,8 @@ public class JobController {
     }
 
     @PutMapping("/jobs/{ID}")
-    public ResponseEntity<String> updateJob(@PathVariable Long id, @RequestBody Job updatedJob){
-        boolean updated= jobService.updateJob(id, updatedJob);
+    public ResponseEntity<String> updateJob(@PathVariable Long ID, @RequestBody Job updatedJob){
+        boolean updated= jobService.updateJob(ID, updatedJob);
         if (updated)
             return new ResponseEntity<>("Job Updated Successfully", HttpStatus.OK);
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
